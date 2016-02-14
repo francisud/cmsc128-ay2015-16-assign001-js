@@ -38,112 +38,13 @@ function numberDelimited(number, singleChar, place){
 }
 
 function wordsToCurrency(numberWord, currency){
-	//splits the string by space
-	var splitted = numberWord.split(" ");	
-	var stack = [];
 	
 	if(!(currency == 'JPY' || currency == 'PHP' || currency == 'USD')){
 		alert('invalid input');
 		return;
 	}
-		
-	//transferring to a linkedlist
-	for(var i = splitted.length-1; i > -1 ; i--){
-		stack.push(splitted[i]);
-	}
 	
-	var values = {
-		'zero': 0,
-		'one': 1,
-		'two': 2,
-		'three': 3,
-		'four': 4,
-		'five': 5,
-		'six': 6,
-		'seven': 7,
-		'eight': 8,
-		'nine': 9,
-		'ten': 10,
-		'eleven': 11,
-		'twelve': 12,
-		'thirteen': 13,
-		'fourteen': 14,
-		'fifteen': 15,
-		'sixteen': 16,
-		'seventeen': 17,
-		'eighteen': 18,
-		'nineteen': 19,
-		'twenty': 20,
-		'thirty': 30,
-		'forty': 40,
-		'fifty': 50,
-		'sixty': 60,
-		'seventy': 70,
-		'eighty': 80,
-		'ninety': 90,
-		'hundred': 100,
-		'thousand': 1000,
-		'million' : 1000000		
-	};
-	
-	var sum = 0;					//final sum of all values
-	
-	var currentAdding = 0;		//all the current values added together that will still be added to sum
-	var currentValue = 0;		//value of keyword from values
-	
-	var currentWord;				//for getting the word being pop
-	
-	var fromHundredThousand = false;		//boolean for checking if the number is at the hundred thousands
-	var fromHundred = false; 
-		
-	while(stack.length != 0){
-		
-		fromHundredThousand = false;
-		currentWord = stack.pop();		
-		currentValue = values[currentWord];
-		
-		//for checking if word is in the key-value pair
-		//reference: http://stackoverflow.com/questions/1098040/checking-if-a-key-exists-in-a-javascript-object
-		if(!(currentWord in values )) {
-			alert('invalid input');
-			return;
-		}
-				
-		if(currentWord == 'million' || currentWord == 'thousand'){
-			
-			//for hundred thousands
-			if(fromHundred == true && currentWord == 'thousand'){
-				sum = sum + currentAdding;
-				sum = sum * 1000;
-				currentAdding = 0;
-				fromHundredThousand = true;
-				fromHundred = false;				
-			}
-			
-			//from million and thousands
-			if((currentWord == 'million' || currentWord == 'thousand') && fromHundredThousand == false){
-				currentAdding = currentAdding * currentValue;
-				sum = currentAdding;
-				currentAdding = 0;
-			}
-		}		
-		
-		//for hundreds
-		else if(currentWord == 'hundred'){
-			currentAdding = currentAdding * currentValue;
-			sum = sum + currentAdding;
-			currentAdding = 0;
-			fromHundred = true;
-		}
-		
-		//for starting digit of each place
-		else{
-			currentAdding = currentAdding + currentValue;
-			
-			if(stack.length == 0)
-				sum = sum + currentAdding;			
-		}
-	}	
+	var sum = wordsToNum(numberWord);
 	
 	//concatenates the currency at the fromt of the string, then concatenate the sum
 	sum = currency.concat(sum);
